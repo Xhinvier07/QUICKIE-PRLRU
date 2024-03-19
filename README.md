@@ -1,1 +1,1 @@
-# Unincentivized Final Project (Algorithms)
+# Non-Incentive Final Project (Algorithms)
