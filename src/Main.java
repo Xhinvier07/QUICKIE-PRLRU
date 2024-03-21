@@ -87,7 +87,7 @@ public class Main extends JFrame {
         });
 
         aboutButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "This program was developed by Group 1 for the course IT 2202 - Data Structures and Algorithms.\n\nGroup 1 members:\n- Member 1\n- Member 2\n- Member 3\n- Member 4\n- Member 5", "About", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Page Replacement (LRU) is bla bla bla", "About", JOptionPane.INFORMATION_MESSAGE);
         });
 
         exitButton.addActionListener(e -> {
