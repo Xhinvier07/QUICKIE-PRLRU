@@ -20,7 +20,7 @@ public class PRLRU extends JFrame {
         ImageIcon icon = new ImageIcon("src/prlru.png");
         setIconImage(icon.getImage());
 
-        setTitle("PR - Least Recently Used Calculator");
+        setTitle("PR-LRU Calculator");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
