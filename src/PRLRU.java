@@ -30,19 +30,19 @@ public class PRLRU extends JFrame {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             // make the font bold
-            Font buttonFont = new Font("Monaco", Font.BOLD, 10);
+            Font buttonFont = new Font("Serif", Font.BOLD, 12);
             UIManager.put("Button.font", buttonFont);
 
-            Font labelFont = new Font("Monaco", Font.BOLD, 10);
+            Font labelFont = new Font("Serif", Font.BOLD, 12);
             UIManager.put("Label.font", labelFont);
 
-            Font rowDataFont = new Font("Monaco", Font.PLAIN, 12);
+            Font rowDataFont = new Font("Serif", Font.PLAIN, 12);
             UIManager.put("Table.font", rowDataFont);
 
-            Font textFont = new Font("Monaco", Font.BOLD, 12);
+            Font textFont = new Font("Serif", Font.PLAIN, 12);
             UIManager.put("TextField.font", textFont);
 
-            Font tableHeaderFont = new Font("Monaco", Font.BOLD, 12);
+            Font tableHeaderFont = new Font("Serif", Font.BOLD, 12);
             UIManager.put("TableHeader.font", tableHeaderFont);
 
         } catch (Exception e) {
@@ -171,6 +171,16 @@ public class PRLRU extends JFrame {
             return;
         }
 
+        if (!isNumeric(incomingStreamInput)) {
+            JOptionPane.showMessageDialog(this, "Please enter numeric values only.");
+            return;
+        }
+
+        if (!isNumeric(framesField.getText())) {
+            JOptionPane.showMessageDialog(this, "Please enter numeric values only.");
+            return;
+        }
+
         // Split input by either spaces or commas
         String[] incomingStreamStringArray = incomingStreamInput.split("[,\\s]+");
 
@@ -228,10 +238,10 @@ public class PRLRU extends JFrame {
         String formattedHitRate = String.format("%.2f", pageHitRate);
         String formattedFaultRate = String.format("%.2f", pageFaultRate);
 
-        resultLabel.setText("<html>PAGE HITS: " + pagehits + "<br/>" +
-                "HIT RATE: " + formattedHitRate + "%<br/>" +
-                "PAGE FAULTS: " + pagefault + "<br/>" +
-                "FAULT RATE: " + formattedFaultRate + "%</html>");
+        resultLabel.setText("<html><font color = 'green'>PAGE HITS: </font>" + pagehits + "<br/>"+
+                "<font color = 'green'>HIT RATE: </font>" + formattedHitRate + "%<br/>" +
+                "<font color = 'red'>PAGE FAULTS: </font>" + pagefault + "<br/>" +
+                "<font color = 'red'>FAULT RATE: </font>" + formattedFaultRate + "%</html>");
     }
 
     private void updateTableRow(int incomingPage, int[] queue, boolean hit, int[] hitCounter, int[] faultCounter) {
@@ -250,6 +260,21 @@ public class PRLRU extends JFrame {
                 return true;
         }
         return false;
+    }
+
+    static boolean isNumeric(String incomingStreamInput){
+        boolean numeric = true;
+
+        String check = incomingStreamInput.replaceAll("\\s", "");
+
+        try{
+        Double num = Double.parseDouble(check);
+        }
+        catch(NumberFormatException e){
+            numeric = false;
+        }
+        
+        return numeric;
     }
 
     public static void main(String[] args) {

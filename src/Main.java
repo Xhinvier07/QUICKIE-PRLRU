@@ -51,7 +51,7 @@ public class Main extends JFrame {
             imageLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             //create spacing for the top and bottom
-            headerPanel.add(Box.createVerticalStrut(20), BorderLayout.NORTH);
+            headerPanel.add(Box.createVerticalStrut(60), BorderLayout.NORTH);
 
             headerPanel.add(imageLabel, BorderLayout.CENTER);
         } catch (Exception ex) {
@@ -75,7 +75,7 @@ public class Main extends JFrame {
         exitButton.setPreferredSize(buttonSize);
 
         // Set font for buttons
-        Font buttonFont = new Font("Monaco", Font.BOLD, 18);
+        Font buttonFont = new Font("Dialog", Font.BOLD, 17);
         calculateButton.setFont(buttonFont);
         aboutButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
