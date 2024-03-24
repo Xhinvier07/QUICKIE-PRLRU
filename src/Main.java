@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 public class Main extends JFrame {
 
@@ -9,43 +12,70 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageIcon icon = new ImageIcon("src/prlru.png"); // Change "logo.png" to the path of your icon image
+        ImageIcon icon = new ImageIcon("src/prlru.png");
         setIconImage(icon.getImage());
 
-        // Set dark background color
-        Color darkBackgroundColor = new Color(34, 34, 34);
+        try {
+            // Set dark theme
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-        // Set dark foreground color
-        Color darkForegroundColor = new Color(240, 240, 240);
+            // Set dark theme font
+            Font darkFont = new Font("Monaco", Font.BOLD, 18);
+            UIManager.put("Button.font", darkFont);
 
-        // Set dark theme font
-        Font darkFont = new Font("Arial", Font.BOLD, 18); // Customize font as needed
-
-        // Set dark theme for UIManager
-        UIManager.put("Panel.background", darkBackgroundColor);
-        UIManager.put("Button.background", darkBackgroundColor);
-        UIManager.put("Button.foreground", darkForegroundColor);
-        UIManager.put("Button.font", darkFont);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
+        // Header panel
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BorderLayout());
+
+        try {
+            // Load the header image
+            BufferedImage headerImage = ImageIO.read(new File("src/header.png"));
+
+            // Resize the image to fit the label
+            int labelWidth = 250; // Adjust this to fit your desired width
+            int labelHeight = 100; // Adjust this to fit your desired height
+            Image scaledImage = headerImage.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+
+            // Create a JLabel with the scaled image
+            JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+
+            // Center align the image
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+            //create spacing for the top and bottom
+            headerPanel.add(Box.createVerticalStrut(20), BorderLayout.NORTH);
+
+            headerPanel.add(imageLabel, BorderLayout.CENTER);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // Button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-
 
         JButton calculateButton = new JButton("Calculate");
         JButton aboutButton = new JButton("About");
         JButton exitButton = new JButton("Exit");
 
         // Set preferred size for buttons
-        Dimension buttonSize = new Dimension(200, 50); // Width and height of the buttons
+        Dimension buttonSize = new Dimension(200, 50);
         calculateButton.setPreferredSize(buttonSize);
         aboutButton.setPreferredSize(buttonSize);
         exitButton.setPreferredSize(buttonSize);
 
         // Set font for buttons
-        Font buttonFont = new Font("Monaco", Font.BOLD, 18); // Change font style as needed
+        Font buttonFont = new Font("Monaco", Font.BOLD, 18);
         calculateButton.setFont(buttonFont);
         aboutButton.setFont(buttonFont);
         exitButton.setFont(buttonFont);
@@ -54,9 +84,7 @@ public class Main extends JFrame {
         aboutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Action listeners...
-
-        buttonPanel.add(Box.createVerticalStrut(100)); // Spacing
+        buttonPanel.add(Box.createVerticalStrut(50)); // Spacing
         buttonPanel.add(calculateButton);
         buttonPanel.add(Box.createVerticalStrut(20)); // Spacing
         buttonPanel.add(aboutButton);
@@ -76,10 +104,8 @@ public class Main extends JFrame {
         add(mainPanel);
         setVisible(true);
 
-        // Add action listeners
-
         calculateButton.addActionListener(e -> {
-           // go in PRLRU class
+            // go in PRLRU class
             dispose();
             PRLRU prlru = new PRLRU();
             prlru.setVisible(true);
@@ -94,12 +120,7 @@ public class Main extends JFrame {
             System.exit(0);
         });
 
-
-
-
     }
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);

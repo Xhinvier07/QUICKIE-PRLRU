@@ -1,10 +1,10 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableCellRenderer;
+import java.awt.Color;
 
 public class PRLRU extends JFrame {
     private JLabel streamLabel, framesLabel, resultLabel;
@@ -15,12 +15,39 @@ public class PRLRU extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
 
-
     public PRLRU() {
-        setTitle("Page Replacement Algorithm");
+
+        ImageIcon icon = new ImageIcon("src/prlru.png");
+        setIconImage(icon.getImage());
+
+        setTitle("PR - Least Recently Used Calculator");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
+            // make the font bold
+            Font buttonFont = new Font("Monaco", Font.BOLD, 10);
+            UIManager.put("Button.font", buttonFont);
+
+            Font labelFont = new Font("Monaco", Font.BOLD, 10);
+            UIManager.put("Label.font", labelFont);
+
+            Font rowDataFont = new Font("Monaco", Font.PLAIN, 12);
+            UIManager.put("Table.font", rowDataFont);
+
+            Font textFont = new Font("Monaco", Font.BOLD, 12);
+            UIManager.put("TextField.font", textFont);
+
+            Font tableHeaderFont = new Font("Monaco", Font.BOLD, 12);
+            UIManager.put("TableHeader.font", tableHeaderFont);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         initComponents();
         addComponents();
@@ -37,13 +64,6 @@ public class PRLRU extends JFrame {
         calculateButton = new JButton("Calculate");
         clearButton = new JButton("Clear");
         backButton = new JButton("Back");
-        
-
-        // Initialize table
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("PAGE");
-        // Add columns for frames dynamically based on input
-
 
         calculateButton.addActionListener(new ActionListener() {
             @Override
@@ -71,21 +91,30 @@ public class PRLRU extends JFrame {
             }
         });
 
+        tableModel = new DefaultTableModel();
+        table = new JTable(tableModel) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Disable cell editing
+            }
+        };
 
-        table = new JTable(tableModel);
+        // column names
+        tableModel.addColumn("PAGE");
+        tableModel.addColumn("FRAMES");
+        tableModel.addColumn("HIT/FAULT");
+
     }
 
     private void addComponents() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Add components to the panel
         panel.add(streamLabel, gbc);
         gbc.gridy++;
         panel.add(streamField, gbc);
@@ -94,12 +123,10 @@ public class PRLRU extends JFrame {
         gbc.gridy++;
         panel.add(framesField, gbc);
 
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(calculateButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(backButton);
-
 
         gbc.gridy++;
         panel.add(buttonPanel, gbc);
@@ -107,33 +134,46 @@ public class PRLRU extends JFrame {
         gbc.gridy++;
         panel.add(resultLabel, gbc);
 
-        // Add panel to frame
+        // Create a padded panel for the table
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); // Enable auto resize
+
+        // Set custom cell renderer for styling
+        DefaultTableCellRenderer renderer = new CustomRenderer(Color.WHITE);
+        renderer.setFont(new Font("Monaco", Font.BOLD, 12)); // Set font to Monaco
+        table.setDefaultRenderer(Object.class, renderer);
+
+        // Disable row selection and cell selection
+        table.setRowSelectionAllowed(false);
+        table.setCellSelectionEnabled(false);
+
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
         add(panel, BorderLayout.NORTH);
-        add(new JScrollPane(table), BorderLayout.CENTER);
-
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int columns = table.getColumnModel().getColumnCount();
-        for (int i = 0; i < columns; i++) {
-            TableColumn column = table.getColumnModel().getColumn(i);
-            int preferredWidth = column.getMinWidth();
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer cellRenderer = table.getCellRenderer(row, i);
-                Component c = table.prepareRenderer(cellRenderer, row, i);
-                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-                preferredWidth = Math.max(preferredWidth, width);
-            }
-            column.setPreferredWidth(preferredWidth);
-        }
-
+        add(tablePanel, BorderLayout.CENTER);
     }
 
     private void calculatePageReplacement() {
-        // Clear previous data
         tableModel.setRowCount(0);
-        resultLabel.setText("");
 
         String incomingStreamInput = streamField.getText();
-        String[] incomingStreamStringArray = incomingStreamInput.split(" ");
+
+        if (incomingStreamInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter an incoming stream.");
+            return;
+        }
+
+        if (framesField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter the number of frames.");
+            return;
+        }
+
+        // Split input by either spaces or commas
+        String[] incomingStreamStringArray = incomingStreamInput.split("[,\\s]+");
+
         int n = incomingStreamStringArray.length;
         int[] incomingStream = new int[n];
         for (int i = 0; i < n; i++) {
@@ -147,35 +187,23 @@ public class PRLRU extends JFrame {
         int occupied = 0;
         int pagefault = 0;
         int pagehits = 0;
-
-        Object[] rowData = new Object[frames + 1];
-        rowData[0] = "HIT/FAULT";
-        for (int i = 1; i <= frames; i++)
-            rowData[i] = "F" + (i - 1);
-        tableModel.addRow(rowData);
+        int[] hitCounter = {0}; // Array to hold hit counter
+        int[] faultCounter = {0}; // Array to hold fault counter
 
         for (int i = 0; i < n; i++) {
-            rowData = new Object[frames + 1];
-            rowData[0] = incomingStream[i];
-
             if (checkHit(incomingStream[i], queue, occupied)) {
                 pagehits++;
-                rowData[1] = "HIT";
-                tableModel.addRow(rowData);
+                updateTableRow(incomingStream[i], queue, true, hitCounter, faultCounter);
             } else if (occupied < frames) {
                 queue[occupied] = incomingStream[i];
                 occupied++;
                 pagefault++;
-                rowData[1] = "FAULT";
-                for (int j = 0; j < occupied; j++) {
-                    rowData[j + 2] = queue[j];
-                }
-                tableModel.addRow(rowData);
+                updateTableRow(incomingStream[i], queue, false, hitCounter, faultCounter);
             } else {
                 int max = Integer.MIN_VALUE;
                 int index = -1;
 
-                for (int j = 0; j < frames; j++) {
+                for (int j  = 0; j < frames; j++) {
                     distance[j] = 0;
                     for (int k = i - 1; k >= 0; k--) {
                         ++distance[j];
@@ -189,21 +217,31 @@ public class PRLRU extends JFrame {
                 }
                 queue[index] = incomingStream[i];
                 pagefault++;
-                rowData[1] = "FAULT";
-                for (int j = 0; j < frames; j++) {
-                    rowData[j + 2] = queue[j];
-                }
-                tableModel.addRow(rowData);
+                updateTableRow(incomingStream[i], queue, false, hitCounter, faultCounter);
             }
         }
 
         double pageHitRate = (double) pagehits / n * 100;
         double pageFaultRate = (double) pagefault / n * 100;
 
+        // 2 decimal places
+        String formattedHitRate = String.format("%.2f", pageHitRate);
+        String formattedFaultRate = String.format("%.2f", pageFaultRate);
+
         resultLabel.setText("<html>PAGE HITS: " + pagehits + "<br/>" +
-                "HIT RATE: " + pageHitRate + "%<br/>" +
+                "HIT RATE: " + formattedHitRate + "%<br/>" +
                 "PAGE FAULTS: " + pagefault + "<br/>" +
-                "FAULT RATE: " + pageFaultRate + "%</html>");
+                "FAULT RATE: " + formattedFaultRate + "%</html>");
+    }
+
+    private void updateTableRow(int incomingPage, int[] queue, boolean hit, int[] hitCounter, int[] faultCounter) {
+        Object[] rowData = new Object[3];
+        rowData[0] = incomingPage;
+        rowData[1] = java.util.Arrays.toString(queue);
+        rowData[2] = hit ? "HIT " + (++hitCounter[0]) : "FAULT " + (++faultCounter[0]);
+
+        // Add row to the table model
+        tableModel.addRow(rowData);
     }
 
     static boolean checkHit(int incomingPage, int[] queue, int occupied) {
@@ -215,9 +253,28 @@ public class PRLRU extends JFrame {
     }
 
     public static void main(String[] args) {
+
         SwingUtilities.invokeLater(() -> {
-             PRLRU gui = new  PRLRU();
+            PRLRU gui = new PRLRU();
             gui.setVisible(true);
         });
+    }
+
+    public class CustomRenderer extends DefaultTableCellRenderer {
+        private Color backgroundColor;
+
+        public CustomRenderer(Color backgroundColor) {
+            this.backgroundColor = backgroundColor;
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            // Set background color
+            component.setBackground(backgroundColor);
+
+            return component;
+        }
     }
 }
