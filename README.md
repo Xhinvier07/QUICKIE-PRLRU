@@ -9,6 +9,8 @@ To access PR-LRU calculator:
 - Make sure that Java is installed.
 - Compile and Run the Main class.
 
+Note: The program is also accessible through running the .jar file.
+
 ## Usage
 | PROGRAM BUTTONS    | DESCRIPTION                                       |
 | ---------------- | ------------------------------------------------- |
