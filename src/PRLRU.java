@@ -107,9 +107,6 @@ public class PRLRU extends JFrame {
         tableModel.addColumn("FRAMES");
         tableModel.addColumn("HIT/FAULT");
 
-        // make the background color of PAGE FRAMES and HIT/FAULT column to blue
-        table.getTableHeader().setBackground(new Color(0x001568)); // Blue color
-
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
     }
