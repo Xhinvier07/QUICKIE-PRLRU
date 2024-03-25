@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import java.awt.Color;
 
 public class Main extends JFrame {
 
@@ -11,6 +12,7 @@ public class Main extends JFrame {
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
 
         ImageIcon icon = new ImageIcon("src/prlru.png");
         setIconImage(icon.getImage());
@@ -36,12 +38,15 @@ public class Main extends JFrame {
 
         try {
             // Load the header image
-            BufferedImage headerImage = ImageIO.read(new File("src/header.png"));
+            BufferedImage headerImage = ImageIO.read(new File("src/header1.png"));
 
             // Resize the image to fit the label
-            int labelWidth = 250; // Adjust this to fit your desired width
-            int labelHeight = 100; // Adjust this to fit your desired height
+            int labelWidth = 270; // Adjust this to fit your desired width
+            int labelHeight = 150; // Adjust this to fit your desired height
             Image scaledImage = headerImage.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
+
+            BufferedImage bufferedImage = new BufferedImage(labelWidth, labelHeight, BufferedImage.TYPE_INT_RGB);
+            bufferedImage.getGraphics().drawImage(scaledImage, 0, 0, null);
 
             // Create a JLabel with the scaled image
             JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
@@ -51,7 +56,7 @@ public class Main extends JFrame {
             imageLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             //create spacing for the top and bottom
-            headerPanel.add(Box.createVerticalStrut(60), BorderLayout.NORTH);
+            headerPanel.add(Box.createVerticalStrut(30), BorderLayout.NORTH);
 
             headerPanel.add(imageLabel, BorderLayout.CENTER);
         } catch (Exception ex) {
@@ -113,7 +118,12 @@ public class Main extends JFrame {
         });
 
         aboutButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Page Replacement (LRU) is bla bla bla", "About", JOptionPane.INFORMATION_MESSAGE);
+            String message = "<html><body style='width: 300px; font-family: serif; text-align: justify;'>"
+                    + "Page replacement is a crucial concept in computer memory management, especially in systems utilizing virtual memory. Virtual memory extends a computer's usable memory beyond physical limits by utilizing disk storage. In such systems, memory is divided into fixed-size blocks known as pages.<br><br>"
+                    + "Least Recently Used (LRU) is a widely employed page replacement algorithm in computer operating systems and memory management. LRU prioritizes replacing the page that has remained untouched for the longest duration.<br><br>"
+                    + "LRU algorithm ensures optimal memory usage by discarding the least recently accessed pages when new ones need to be loaded. This approach maximizes system performance by retaining frequently accessed data in memory while efficiently managing memory resources."
+                    + "</body></html>";
+            JOptionPane.showMessageDialog(this, message, "About", JOptionPane.INFORMATION_MESSAGE);
         });
 
         exitButton.addActionListener(e -> {

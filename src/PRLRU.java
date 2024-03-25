@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PRLRU extends JFrame {
     private JLabel streamLabel, framesLabel, resultLabel;
@@ -15,13 +17,14 @@ public class PRLRU extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
 
+
     public PRLRU() {
 
         ImageIcon icon = new ImageIcon("src/prlru.png");
         setIconImage(icon.getImage());
 
         setTitle("PR-LRU Calculator");
-        setSize(600, 400);
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -104,16 +107,25 @@ public class PRLRU extends JFrame {
         tableModel.addColumn("FRAMES");
         tableModel.addColumn("HIT/FAULT");
 
+        // make the background color of PAGE FRAMES and HIT/FAULT column to blue
+        table.getTableHeader().setBackground(new Color(0x001568)); // Blue color
+
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
     }
 
     private void addComponents() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5);
+
+        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
 
         panel.add(streamLabel, gbc);
         gbc.gridy++;
@@ -124,6 +136,10 @@ public class PRLRU extends JFrame {
         panel.add(framesField, gbc);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        //bg color
+        buttonPanel.setBackground(new Color(0xE8EFF3)); // Light blue color
+        panel.setBackground(new Color(0xE8EFF3)); // Light blue color
+
         buttonPanel.add(calculateButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(backButton);
@@ -137,6 +153,10 @@ public class PRLRU extends JFrame {
         // Create a padded panel for the table
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+        tablePanel.setBackground(new Color(0xD7DCE7));
+        // add thickness to the border
+
+
 
         JScrollPane scrollPane = new JScrollPane(table);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); // Enable auto resize
@@ -199,10 +219,12 @@ public class PRLRU extends JFrame {
         int pagehits = 0;
         int[] hitCounter = {0}; // Array to hold hit counter
         int[] faultCounter = {0}; // Array to hold fault counter
+        HashSet<Integer> distinctReferences = new HashSet<>();
 
         for (int i = 0; i < n; i++) {
             if (checkHit(incomingStream[i], queue, occupied)) {
                 pagehits++;
+                distinctReferences.add(incomingStream[i]); // Adding to distinct references
                 updateTableRow(incomingStream[i], queue, true, hitCounter, faultCounter);
             } else if (occupied < frames) {
                 queue[occupied] = incomingStream[i];
@@ -229,6 +251,7 @@ public class PRLRU extends JFrame {
                 pagefault++;
                 updateTableRow(incomingStream[i], queue, false, hitCounter, faultCounter);
             }
+            distinctReferences.add(incomingStream[i]); // Adding to distinct references
         }
 
         double pageHitRate = (double) pagehits / n * 100;
@@ -241,8 +264,11 @@ public class PRLRU extends JFrame {
         resultLabel.setText("<html><font color = 'green'>PAGE HITS: </font>" + pagehits + "<br/>"+
                 "<font color = 'green'>HIT RATE: </font>" + formattedHitRate + "%<br/>" +
                 "<font color = 'red'>PAGE FAULTS: </font>" + pagefault + "<br/>" +
-                "<font color = 'red'>FAULT RATE: </font>" + formattedFaultRate + "%</html>");
+                "<font color = 'red'>FAULT RATE: </font>" + formattedFaultRate + "%<br/>" +
+                "<font color = 'blue'>TOTAL REFERENCES: </font>" + n + "<br/>" +
+                "<font color = 'blue'>TOTAL DISTINCT REFERENCES: </font>" + distinctReferences.size() + "</html>");
     }
+
 
     private void updateTableRow(int incomingPage, int[] queue, boolean hit, int[] hitCounter, int[] faultCounter) {
         Object[] rowData = new Object[3];
@@ -273,7 +299,7 @@ public class PRLRU extends JFrame {
         catch(NumberFormatException e){
             numeric = false;
         }
-        
+
         return numeric;
     }
 

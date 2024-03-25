@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="QUICKIE-PRLRU:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/QUICKIE_PRLRU_jar</output-path>
+    <root id="archive" name="QUICKIE-PRLRU.jar">
+      <element id="module-output" name="QUICKIE-PRLRU" />
+    </root>
+  </artifact>
+</component>
