@@ -14,7 +14,7 @@ public class Main extends JFrame {
         setLocationRelativeTo(null);
 
 
-        ImageIcon icon = new ImageIcon("src/prlru.png");
+        ImageIcon icon = new ImageIcon("src/PAGE replacement.png");
         setIconImage(icon.getImage());
 
         try {
@@ -38,10 +38,10 @@ public class Main extends JFrame {
 
         try {
             // Load the header image
-            BufferedImage headerImage = ImageIO.read(new File("src/header1.png"));
+            BufferedImage headerImage = ImageIO.read(new File("src/PAGE replacement.png"));
 
             // Resize the image to fit the label
-            int labelWidth = 270; // Adjust this to fit your desired width
+            int labelWidth = 275; // Adjust this to fit your desired width
             int labelHeight = 150; // Adjust this to fit your desired height
             Image scaledImage = headerImage.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
 
@@ -56,7 +56,7 @@ public class Main extends JFrame {
             imageLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             //create spacing for the top and bottom
-            headerPanel.add(Box.createVerticalStrut(30), BorderLayout.NORTH);
+            headerPanel.add(Box.createVerticalStrut(40), BorderLayout.NORTH);
 
             headerPanel.add(imageLabel, BorderLayout.CENTER);
         } catch (Exception ex) {
