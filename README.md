@@ -1,4 +1,4 @@
-# Non-Incentive Final Project (Algorithms)
+# Page Replacement Calculator - Least Recently Used (LRU)
 
 ## About
 The PR-LRU calculator is a meticulously designed tool that aims to provide substantial data and visual representation highlighting the optimal performance of the Least Recently Used (LRU) technique as a page replacement algorithm.
