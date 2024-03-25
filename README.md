@@ -14,7 +14,7 @@ To access PR-LRU calculator:
 | ---------------- | ------------------------------------------------- |
 | Calculate (Main)        | Changes interface and enters the calculation program.   |
 | About       | Displays more information about the algorithm and the program.      |
-| Calculate (PRLRU)        | Calculate the needed data from the inputted string and number of frames.          |
+| Calculate (PRLRU)        | Calculates and displays the needed data from the inputted string and number of frames.          |
 | Clear | Reset the values.      |
 | Back | Return to the main menu.      |
 | Exit | Exit the program      |
