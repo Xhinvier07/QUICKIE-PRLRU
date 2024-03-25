@@ -20,6 +20,6 @@ To access PR-LRU calculator:
 | Exit | Exit the program      |
 
 ## Authors
-Moral, Jansen G.
-Paglinawan, John Christian S.
-Sandhu, Dharmveer S.
+- Moral, Jansen G.
+- Paglinawan, John Christian S.
+- Sandhu, Dharmveer S.
