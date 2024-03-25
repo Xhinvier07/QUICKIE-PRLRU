@@ -153,8 +153,6 @@ public class PRLRU extends JFrame {
         tablePanel.setBackground(new Color(0xD7DCE7));
         // add thickness to the border
 
-
-
         JScrollPane scrollPane = new JScrollPane(table);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); // Enable auto resize
 

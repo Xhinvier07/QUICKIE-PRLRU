@@ -1,3 +1,4 @@
+// developed by MORAL, SANDHU, PAGLINAWAN (Group QUICKIE)
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,12 +10,12 @@ public class Main extends JFrame {
 
     public Main() {
         setTitle("PR-LRU Calculator");
-        setSize(400, 500);
+        setSize(400, 460);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
 
-        ImageIcon icon = new ImageIcon("src/PAGE replacement.png");
+        ImageIcon icon = new ImageIcon("src/prlru.png");
         setIconImage(icon.getImage());
 
         try {
@@ -38,10 +39,10 @@ public class Main extends JFrame {
 
         try {
             // Load the header image
-            BufferedImage headerImage = ImageIO.read(new File("src/PAGE replacement.png"));
+            BufferedImage headerImage = ImageIO.read(new File("src/PAGE_replacement.png"));
 
             // Resize the image to fit the label
-            int labelWidth = 275; // Adjust this to fit your desired width
+            int labelWidth = 350; // Adjust this to fit your desired width
             int labelHeight = 150; // Adjust this to fit your desired height
             Image scaledImage = headerImage.getScaledInstance(labelWidth, labelHeight, Image.SCALE_SMOOTH);
 
@@ -56,7 +57,7 @@ public class Main extends JFrame {
             imageLabel.setVerticalAlignment(SwingConstants.CENTER);
 
             //create spacing for the top and bottom
-            headerPanel.add(Box.createVerticalStrut(40), BorderLayout.NORTH);
+            headerPanel.add(Box.createVerticalStrut(20), BorderLayout.NORTH);
 
             headerPanel.add(imageLabel, BorderLayout.CENTER);
         } catch (Exception ex) {
@@ -89,7 +90,7 @@ public class Main extends JFrame {
         aboutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        buttonPanel.add(Box.createVerticalStrut(50)); // Spacing
+        buttonPanel.add(Box.createVerticalStrut(30)); // Spacing
         buttonPanel.add(calculateButton);
         buttonPanel.add(Box.createVerticalStrut(20)); // Spacing
         buttonPanel.add(aboutButton);
