@@ -22,6 +22,6 @@ Note: The program is also accessible by running the .jar file.
 | Exit | Exit the program      |
 
 ## Authors
-- Moral, Jansen G.
+- Moral, Jansen Jhoel G.
 - Paglinawan, John Christian S.
 - Sandhu, Dharmveer S.
