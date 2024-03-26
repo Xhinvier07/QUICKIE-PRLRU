@@ -6,10 +6,10 @@ The PR-LRU calculator is a meticulously designed tool that aims to provide subst
 ## Instructions
 To access PR-LRU calculator:
 - Clone this repository.
-- Make sure that Java is installed.
+- Make sure that at least JDK 20 is installed.
 - Compile and Run the Main class.
 
-Note: The program is also accessible through running the .jar file.
+Note: The program is also accessible by running the .jar file.
 
 ## Usage
 | PROGRAM BUTTONS    | DESCRIPTION                                       |
